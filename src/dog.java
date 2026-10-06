@@ -13,7 +13,9 @@ public class Dog {
   }
 
   public void setName(String n){
-    name = n;
+    if(!n.startsWith(" ")){
+      name = n;
+    }
   }
 
   public void getName(){
@@ -29,7 +31,9 @@ public class Dog {
   }
 
   public void setAge(int a){
-    age = a;
+    if(a < 33){
+      age = a;
+    }
   }
 
   public void getAge() {
