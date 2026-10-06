@@ -1,43 +1,34 @@
 /*--------------------------------------------
-Program 5: MPLS Dog Management System
+Program 6: MPLS Dog Management System
 	
-    [REPLACE MY INFORMATION WITH YOURS]
     Course: COMP 170, Fall I 2026
     System: Visual Studio Code, Windows 11
     Author: E. Pomes
-
-
-    project wishlist: 
-    1. sentinal values for:
-        Entry display, giving user the option to exit after dog IDs are displayed instead of selecting an entry
-        dogEntry, after available IDs are displayed
-    2. Confirmation prompt for dogEntry before overwriting existing record
-    3. write to file to keep data so this program would actually be usuable
-        with option to save changes and confirmation prompt if exiting without saving
 */
 
 import java.util.Scanner; //Importing Scanner Class
 import java.util.ArrayList; //importing arraylist function
 public class DogManagement {
-    /*
-     * Global Declaration for parallel arrays and Scanner Object
-     */
-    //DECLARING PARALEL ARRAYS OUTSIDE OF MAIN METHOD TO HOLD DOG DATA use the static keyword
-    static final int[] dogID = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-    static String[] dogName = new String[12];
-    static double[] dogWeight = new double[12];
-    static int[] dogAge = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    //arraylists for tracking slot status
+    //DECLARING PARALEL ARRAYS OUTSIDE OF MAIN METHOD TO HOLD DOG DATA use the static keyword
+    static ArrayList<Integer> dogID;
+	// static ArrayList<String> dogName;
+	// static ArrayList<double> dogWeight;
+	// static ArrayList<Integer> dogAge;
+
+    /*
+	//arraylists for tracking slot status
     static ArrayList<Integer> closedSlots = new ArrayList<Integer>();
     static ArrayList<Integer> openSlots = new ArrayList<Integer>();
+	*/
 
     //DECLARING SCANNER OBJECT
     static Scanner scn = new Scanner(System.in);
     
-    //this is used to re-sync user input with the actual index number of the arrays, should always be 'user input - 1 = array index'
+  /*
+	//this is used to re-sync user input with the actual index number of the arrays, should always be 'user input - 1 = array index'
     static int raw;
-    static int adjustedEntry; 
+    static int adjustedEntry; */
 
     //declaring final variables for menu options
     final static String NAV_PROMPT = "\nSelect a menu option:";
@@ -50,18 +41,20 @@ public class DogManagement {
     final static String UPDATE_OPT_1 = "1. Name";
     final static String UPDATE_OPT_2 = "2. Weight";
     final static String UPDATE_OPT_3 = "3. Age";
+	final static String UPDATE_OPT_4 = "4. Delete record";
 
   //main method here
     public static void main(String[] args) throws Exception {
         //local variables
         int menuOption;
 
+		//read existing doginfo file, convert into entries into dog objects, create arraylist for dogIDs
         welcome();
         while(true){
             options();
-            menuOption = getInput(scn, "Enter selection here: ", "Menu option does not exist. ",5);
+            menuOption = getInput(scn, "Enter selection here: ", "Menu option does not exist. ", 5);
             if (menuOption == 1) {
-                dogEntry();
+                CreateEntry();
             } else if (menuOption == 2) {
                 entryDisplay();
             } else if (menuOption == 3) {
@@ -183,173 +176,95 @@ public class DogManagement {
         }
     }
 
-    //end helper methods
+	public static int getIndex (String prompt, String error; ArrayList <Integer> u){
+		String response;
+		System.out.print(prompt + " or hit any key to quit.");
+		response = scn.nextLine();
+		if(u.contains(response) {
+			adjustedEntry = u.indexOf(response);
+		} else {
+			System.out.println(error);
+			System.out.print(prompt);
+			response = scn.nextLine();
+        }
+		return adjustedEntry;
+	}
+	
 
-    /*
-    *adding spaces to make code easier to scan visually
-    *
-    * 
-    * 
-    * the two methods below are used to check if any given index number in the parallel arrays already have data*/
+	    //end helper methods
+	
     
-    /**error is happening in making entries into the array list - testing showed that the arraylist does generate, 
-     * but it doesn't populate
-     * 
-     * 
-     * changelog 1: switched from using dogName array to dogAge array, and set all dogAgg elements to zero. Swapped
-     * if(dogName[i] == null) to if(dogAge[i] == 0), added a seperate step to create an int for the ID, no go.
-     * 
-     * changelog 2: tested with a for loop with an if statement, if dogAge[i] == 0, print i+1. nothing. The loop doesn't
-     * appear to be working
-     * 
-     * changelog 3: moved the entire for loop into the main method, it didn't run. 
-     * 
-     * changelog 4: tested by changing dogAge[i] == 0 to dogAge[1] < 1
-     * 
-     * changelog 5: I'm an idiot and need to be tested for dyslexia, the for loop was set up with i > dogAge.length instead of
-     * i < dogAge.length
-     */
-    public static void freeSlot() {  
-        /* checks which slots in the parallel arrays have null entries
-        *@param i - the parallel arrays index number
-        *@param s - the arraylist index number
-        * */
-        for (int i = 0; i < dogAge.length; i++){ 
-            /*dogAge array is used as test for if other parallel arrays indices are in use
-            *the zero value can only exist if parallel arrays haven't been filled
-            *since the array is initialized with zeros for each indices and user input is limited to >=1
-            */
-            if(dogAge[i] == 0) {
-                openSlots.add(i + 1); 
-                //updates the arraylist with the adjusted value - the index number is always 1 less than the dog ID
-            }
-        }
-        if(openSlots.isEmpty()) {
-            System.out.println("All Dog IDs are assigned!"); //keeps program from printing a no entry list
-        } else {
-            for(int s = 0; s < (openSlots.size() - 1); s++) //only one free ID case formatting
-                if(s == (openSlots.size() - 1) && s == 0){
-                    System.out.println("Dog ID " + openSlots.get(s) + "is free.");
-                    break; 
-                } else { //multiple free IDs
-                    System.out.print("Dog IDs "); //fixed output in front of the variable output
-                    for(int m = 0; m < openSlots.size(); m++) {
-                        if(m == (openSlots.size() - 1)){ //for loop to print out all open slots
-                            System.out.print("and " + openSlots.get(s)); //last entry in list gets special formatting
-                        } else {
-                            System.out.print(openSlots.get(s) + ", "); //everything else gets entry-comma-space format
-                        }
-                }
-            }
-            System.out.println(" are free. ");   //fixed output after the variable output    
-        }
-        openSlots.clear(); //clear arraylist so changes are reflected next time it runs 
-    }
-
-
-    public static void usedSlot() { 
-        /* checks which slots in the parallel arrays indices are in use, like freeSlot unless noted
-        *@param i - the parallel arrays index number
-        *@param s - the arraylist index number
-        * */
-        for (int i = 0; i < dogAge.length; i++){
-            if(dogAge[i] != 0) {
-                closedSlots.add(i + 1);
-            }
-        }
-        if(closedSlots.isEmpty()) {
-            System.out.println("No IDs currently in use.");
-        } else {
-            System.out.println("Dog IDs in use:"); //different formatting, fixed output is only in front of variable output
-            for(int s = 0; s < closedSlots.size(); s++) {  
-                System.out.println("# " +  (s + 1) + ": " + dogName[s]);      
-            }
-        }
-    }
-    //end index check methods
-    
-    //method to display array elements
+    //methods for menu options
     
     public static void entryDisplay() {
         //no parameters in this one.
-        usedSlot();
-        if(Empty(closedSlots)){
-            System.out.println("No existing entries, terminating edit function.");
+        if(isEmpty(dogID)){
+            System.out.println("No existing entries, terminating entry display.");
             return;
-        }
-        adjustedEntry = getInput(scn, "Select dog ID: ", "Not a valid ID.", 12) - 1;
-        if(dogName[adjustedEntry] == null){
-            System.out.println("Unused ID");
         } else {
-            System.out.println("\nDog Name: " + dogName[adjustedEntry]);
-            System.out.println("Dog Weight: " + dogWeight[adjustedEntry] + " lbs");
-            System.out.println("Dog Age: " + dogAge[adjustedEntry]);
+     		index = getIndex("Enter Dog ID: ", "No existing dog with that id!", ArrayList<Integer> dogID);
+            
+			//use ID to look up dog object, and then print dog object's attributes
+			
+			System.out.println("\nDog Name: " + getName());
+            System.out.println("Dog Weight: " + getWeight() + " lbs");
+            System.out.println("Dog Age: " + getAge());
         }
     }   
     
-    //another helper method, for terminating the 'update' branch if there's no existing data
-    public static boolean Empty(ArrayList<Integer> i){
-        /*
-        *@param ArrayList<Integer> i- this pulls the arraylist used by name  */
-        if(i.isEmpty()){
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-
    
     //*two methods below are for altering array elements
 
-    public static void dogEntry() {
-        /* no parameters in this method
-        *
-        *wishlist: add a confirmation prompt before overwriting an existing entry*/
-        freeSlot();  //displays open slots but does not prevent overwriting
-        raw = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 12); //this takes the user input and assigns it to a variable
-        adjustedEntry = raw - 1; //this matches the displayed dog ID with its index number
+    public static void createEntry() {
+		int numberID;
+		System.out.println("Create Dog ID: ")
+		numberID = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 1000); //this takes the user input and assigns it to a variable
+		if(dogID.contains(numberID)) {
+			System.out.println("Dog ID already in use, please choose another.");
+			numberID = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 1000);
+		}
         System.out.print("Enter Dog Name: "); 
-        dogName[adjustedEntry] = scn.nextLine();
-        dogWeight[adjustedEntry] = dogWeight(scn, "Enter Dog Weight in lbs: ");
-        dogAge[adjustedEntry] = getInput(scn, "Enter Dog Age: ", "Please be serious. What's the actual age?", 32);
+        dogName = scn.nextLine();
+        dogWeight = dogWeight(scn, "Enter Dog Weight in lbs: ");
+        dogAge = getInput(scn, "Enter Dog Age: ", "Please be serious. What's the actual age?", 32);
         //according to wikipedia, the oldest dog to ever live died a few months short of 32 years old
-        System.out.println("\nRecord " + raw + " has successfully been updated.\n");
+
+		Dog adog = new Dog(dogID, dogName, dogWeight, dogAge);
+
+		//create dog object and then write attributes back to file
+		
+        System.out.println("\nRecord " + DogID + " has successfully been created.\n");
     }
 
 
 
     public static void entryUpdate() {
-        int fieldNumber; //declared as local because it's only used here, it gets initialized as the user input
-        usedSlot();
-        adjustedEntry = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 12) - 1;
-        //check if the entry already exists, to prevent users from entering data in only one of the parallel arrays
-        while(dogName[adjustedEntry] == null){ 
-            System.out.println("Unused ID");
-            System.out.print("Enter Valid ID or hit any letter to go back to menu: ");
-            while(scn.hasNextInt()) {
-                adjustedEntry = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 12) - 1;
-            }
-            return; //if the input isn't an integer, method terminates and program starts from main again.
-        }
+		int index;
+		//look up dog object by ID attribute
+		
+		// index = getIndex("Enter Dog ID: ", "No existing dog with that id!", ArrayList<Integer> dogID);
+		
         //the part where users are allowed to update fields, where fieldNumber gets initialized
         System.out.println(ENTRY_UPDATE_PROMPT);
         System.out.println(UPDATE_OPT_1);
         System.out.println(UPDATE_OPT_2);
         System.out.println(UPDATE_OPT_3);
-        fieldNumber = getInput(scn, "Enter the field number you wish to edit: ", "Selected field does not exist.",3);
+		System.out.println(UPDATE_OPT_4);
+        fieldNumber = getInput(scn, "Enter the field number you wish to edit: ", "Selected field does not exist.", 3);
         if(fieldNumber == 1) { //updates dog name
-            System.out.println("Current Dog Name: " + dogName[adjustedEntry]);
+            System.out.println("Current Dog Name: " + getName());
             System.out.print("Enter new Dog Name: ");
-            dogName[adjustedEntry] = scn.next();
+            setName();
         } else if (fieldNumber == 2) { //updates dog weight
-            System.out.println("Current Dog weight: " + dogWeight[adjustedEntry] + " lbs");
-            dogWeight[adjustedEntry] = dogWeight(scn, "Enter new Dog Weight: ");
-        } else { //updates dog age
-            System.out.println("Current Dog Age: " + dogAge[adjustedEntry]);
-            dogAge[adjustedEntry] = getInput(scn, "Enter Dog Age:", "Please be serious. What's the actual age?", 32);
-        }
-
+            System.out.println("Current Dog weight: " + getWeight() " lbs");
+            setWeight();
+        } else if (fieldNumber == 3) { //updates dog age
+            System.out.println("Current Dog Age: " + getAge());
+            setAge();
+        } else {
+			//delete dog object, remove from file
+		}
+		//write parallel arrays back to file, re-initialize file list to update dog object?
     }
 
     //extra credit, dog years module
