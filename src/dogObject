@@ -1,0 +1,6 @@
+public class Dog {
+  int ID;
+  String name;
+  double weight;
+  int age;
+}
