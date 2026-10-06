@@ -34,7 +34,7 @@ public class App {
             br.readLine(); //Reads the first line which is the headers
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(COMMA_DELIMITER);
-                dogList.add(new dog(Integer.parseInteger(values[0]), values[1], Double.parseDouble(values[2]), Integer.parseInteger(values[3])));
+                dogList.add(new Dog(Integer.parseInteger(values[0]), values[1], Double.parseDouble(values[2]), Integer.parseInteger(values[3])));
             }
             br.close();
         }
