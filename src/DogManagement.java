@@ -16,19 +16,12 @@ public class DogManagement {
 	// static ArrayList<double> dogWeight;
 	// static ArrayList<Integer> dogAge;
 
-    /*
-	//arraylists for tracking slot status
-    static ArrayList<Integer> closedSlots = new ArrayList<Integer>();
-    static ArrayList<Integer> openSlots = new ArrayList<Integer>();
-	*/
-
     //DECLARING SCANNER OBJECT
     static Scanner scn = new Scanner(System.in);
     
-  /*
-	//this is used to re-sync user input with the actual index number of the arrays, should always be 'user input - 1 = array index'
-    static int raw;
-    static int adjustedEntry; */
+  
+    static int index;
+    static int adjustedEntry;
 
     //declaring final variables for menu options
     final static String NAV_PROMPT = "\nSelect a menu option:";
@@ -36,7 +29,6 @@ public class DogManagement {
     final static String NAV_OPT_2 = "\t2) Display dog record";
     final static String NAV_OPT_3 = "\t3) Update dog record";
     final static String NAV_OPT_4 = "\t4) Exit Program";
-    final static String NAV_OPT_5 = "\t5) Just for fun: current boarders' ages in dog years";
     final static String ENTRY_UPDATE_PROMPT = "Which field do you want to edit?";
     final static String UPDATE_OPT_1 = "1. Name";
     final static String UPDATE_OPT_2 = "2. Weight";
@@ -59,10 +51,8 @@ public class DogManagement {
                 entryDisplay();
             } else if (menuOption == 3) {
                 entryUpdate();
-            } else if(menuOption == 4){
-                System.exit(4);
             } else {
-                dogYears();
+                System.exit(4);
             }
         }    
 
@@ -81,7 +71,6 @@ public class DogManagement {
         System.out.println(NAV_OPT_2);
         System.out.println(NAV_OPT_3);
         System.out.println(NAV_OPT_4);
-        System.out.println("\n" + NAV_OPT_5 + "\n");
 
     }
 
@@ -176,11 +165,11 @@ public class DogManagement {
         }
     }
 
-	public static int getIndex (String prompt, String error; ArrayList <Integer> u){
+	public static int getIndex (String prompt, String error, ArrayList <Integer> u){
 		String response;
 		System.out.print(prompt + " or hit any key to quit.");
 		response = scn.nextLine();
-		if(u.contains(response) {
+		if(u.contains(response)) {
 			adjustedEntry = u.indexOf(response);
 		} else {
 			System.out.println(error);
@@ -198,7 +187,7 @@ public class DogManagement {
     
     public static void entryDisplay() {
         //no parameters in this one.
-        if(isEmpty(dogID)){
+        if(dogID.isEmpty()){
             System.out.println("No existing entries, terminating entry display.");
             return;
         } else {
@@ -217,32 +206,31 @@ public class DogManagement {
 
     public static void createEntry() {
 		int numberID;
-		System.out.println("Create Dog ID: ")
+		System.out.println("Create Dog ID: ");
 		numberID = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 1000); //this takes the user input and assigns it to a variable
 		if(dogID.contains(numberID)) {
 			System.out.println("Dog ID already in use, please choose another.");
 			numberID = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 1000);
 		}
         System.out.print("Enter Dog Name: "); 
-        dogName = scn.nextLine();
+        dogName = scn.next();
         dogWeight = dogWeight(scn, "Enter Dog Weight in lbs: ");
         dogAge = getInput(scn, "Enter Dog Age: ", "Please be serious. What's the actual age?", 32);
         //according to wikipedia, the oldest dog to ever live died a few months short of 32 years old
 
-		Dog adog = new Dog(dogID, dogName, dogWeight, dogAge);
+		Dog adog = new Dog(numberID, dogName, dogWeight, dogAge);
 
 		//create dog object and then write attributes back to file
 		
-        System.out.println("\nRecord " + DogID + " has successfully been created.\n");
+        System.out.println("\nRecord " + numberID + " has successfully been created.\n");
     }
 
 
 
     public static void entryUpdate() {
-		int index;
 		//look up dog object by ID attribute
 		
-		// index = getIndex("Enter Dog ID: ", "No existing dog with that id!", ArrayList<Integer> dogID);
+		index = getIndex("Enter Dog ID: ", "No existing dog with that id!", ArrayList<Integer> dogID);
 		
         //the part where users are allowed to update fields, where fieldNumber gets initialized
         System.out.println(ENTRY_UPDATE_PROMPT);
@@ -254,31 +242,16 @@ public class DogManagement {
         if(fieldNumber == 1) { //updates dog name
             System.out.println("Current Dog Name: " + getName());
             System.out.print("Enter new Dog Name: ");
-            setName();
+            setName(scn.next());
         } else if (fieldNumber == 2) { //updates dog weight
-            System.out.println("Current Dog weight: " + getWeight() " lbs");
-            setWeight();
+            System.out.println("Current Dog weight: " + getWeight() + " lbs");
+            setWeight(dogWeight(scn, "Enter new dog weight: "));
         } else if (fieldNumber == 3) { //updates dog age
             System.out.println("Current Dog Age: " + getAge());
-            setAge();
+            setAge(dogAge(scn, "Enter new dog age: "));
         } else {
 			//delete dog object, remove from file
 		}
 		//write parallel arrays back to file, re-initialize file list to update dog object?
-    }
-
-    //extra credit, dog years module
-    public static void dogYears() {
-        int dogYears;
-        for (int i = 0; i < dogAge.length; i++){
-            if(dogAge[i] != 0) {
-                closedSlots.add(i + 1);
-            }
-         System.out.println("Dog IDs in use:"); //different formatting, fixed output is only in front of variable output
-            for(int s = 0; s < openSlots.size(); s++) {
-                dogYears = dogAge[s-1] * 15;
-                System.out.println("# " +  s + ": " + dogName[s-1] + " Age: " + dogAge[s-1] + " Age in Dog Years: " + dogYears);      
-            }
-        }
     }
 }
