@@ -15,17 +15,17 @@ public class Dog {
     this.numberID = numberID;
   }
 
-  public void getID(int numberID){
+  public int getID(){
     return numberID;
   }
 
   public void setName(String name){
-    if(!n.startsWith(" ")){
+    if(!name.startsWith(" ")){
       this.name = name;
     }
   }
 
-  public void getName(String name){
+  public String getName(){
     return name;
   }
 
@@ -33,17 +33,17 @@ public class Dog {
     this.weight = weight;
   }
 
-  public void getWeight(double weight){
+  public double getWeight(){
     return weight;
   }
 
   public void setAge(int age){
-    if(a < 33){
+    if(age < 33){
       this.age = age;
     }
   }
 
-  public void getAge(int age) {
+  public int getAge() {
     return age;
   }
 
