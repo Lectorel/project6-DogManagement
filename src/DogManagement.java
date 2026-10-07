@@ -194,10 +194,12 @@ public class DogManagement {
      		index = getIndex("Enter Dog ID: ", "No existing dog with that id!", ArrayList<Integer> dogID);
             
 			//use ID to look up dog object, and then print dog object's attributes
-			
-			System.out.println("\nDog Name: " + getName());
-            System.out.println("Dog Weight: " + getWeight() + " lbs");
-            System.out.println("Dog Age: " + getAge());
+
+			//getName(dogID.get(index))
+			//(dogID.get(index)).name
+			System.out.println("\nDog Name: " + (dogID.get(index)).name);
+            System.out.println("Dog Weight: " + (dogID.get(index)).weight) + " lbs");
+            System.out.println("Dog Age: " + (dogID.get(index)).age);
         }
     }   
     
@@ -206,6 +208,9 @@ public class DogManagement {
 
     public static void createEntry() {
 		int numberID;
+		String dogName;
+		double dogWeight;
+		int dogAge;
 		System.out.println("Create Dog ID: ");
 		numberID = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 1000); //this takes the user input and assigns it to a variable
 		if(dogID.contains(numberID)) {
@@ -218,7 +223,7 @@ public class DogManagement {
         dogAge = getInput(scn, "Enter Dog Age: ", "Please be serious. What's the actual age?", 32);
         //according to wikipedia, the oldest dog to ever live died a few months short of 32 years old
 
-		Dog adog = new Dog(numberID, dogName, dogWeight, dogAge);
+		Dog numberID = new Dog(numberID, dogName, dogWeight, dogAge);
 
 		//create dog object and then write attributes back to file
 		
@@ -240,18 +245,19 @@ public class DogManagement {
 		System.out.println(UPDATE_OPT_4);
         fieldNumber = getInput(scn, "Enter the field number you wish to edit: ", "Selected field does not exist.", 3);
         if(fieldNumber == 1) { //updates dog name
-            System.out.println("Current Dog Name: " + getName());
+			//(dogID.get(index)).name
+            System.out.println("Current Dog Name: " + (dogID.get(index)).name);
             System.out.print("Enter new Dog Name: ");
-            setName(scn.next());
+            (dogID.get(index)).name = scn.next();
         } else if (fieldNumber == 2) { //updates dog weight
-            System.out.println("Current Dog weight: " + getWeight() + " lbs");
-            setWeight(dogWeight(scn, "Enter new dog weight: "));
+            System.out.println("Current Dog weight: " + (dogID.get(index)).weight + " lbs");
+            (dogID.get(index)) = dogWeight(scn, "Enter new dog weight: ");
         } else if (fieldNumber == 3) { //updates dog age
-            System.out.println("Current Dog Age: " + getAge());
-            setAge(dogAge(scn, "Enter new dog age: "));
+            System.out.println("Current Dog Age: " + (dogID.get(index)).age);
+            (dogID.get(index)).age = dogAge(scn, "Enter new dog age: ");
         } else {
 			//delete dog object, remove from file
 		}
-		//write parallel arrays back to file, re-initialize file list to update dog object?
+		//write changes back to csv
     }
 }
