@@ -1,45 +1,51 @@
 public class Dog {
-  private int ID;
+  private int numberID;
   private String name;
   private double weight;
   private int age;
 
-  public void setID(int i){
-    ID = i;
+  public Dog (int nu, String na, double we, int ag){
+    nu = numberID;
+    na = name;
+    we = weight;
+    ag = age;
+  }
+  
+  public void setID(int numberID){
+    this.numberID = numberID;
   }
 
-  public void getID(){
-    return ID;
+  public void getID(int numberID){
+    return numberID;
   }
 
-  public void setName(String n){
+  public void setName(String name){
     if(!n.startsWith(" ")){
-      name = n;
+      this.name = name;
     }
   }
 
-  public void getName(){
+  public void getName(String name){
     return name;
   }
 
-  public void setWeight(double w){
-    weight = w;
+  public void setWeight(double weight){
+    this.weight = weight;
   }
 
-  public void getWeight(){
+  public void getWeight(double weight){
     return weight;
   }
 
-  public void setAge(int a){
+  public void setAge(int age){
     if(a < 33){
-      age = a;
+      this.age = age;
     }
   }
 
-  public void getAge() {
+  public void getAge(int age) {
     return age;
   }
 
 }
 
-public class 
