@@ -19,10 +19,11 @@ public class DogManagement {
 	// static ArrayList<double> dogWeight;
 	// static ArrayList<Integer> dogAge;
 
+    readFromFile();
     //DECLARING SCANNER OBJECT
     static Scanner scn = new Scanner(System.in);
     
-  
+
     static int index;
     // static int adjustedEntry;
 
@@ -172,7 +173,7 @@ public class DogManagement {
         int userResponse;
         boolean trigger = true;
 		userResponse = getInput(scn, prompt, error, 1000);
-        while(trigger){
+        while(trigger = true){
             for(int i = 0; i < u.size(); i++) {
                 if(u.get(i).getID() == userResponse) {
                     index = i;
