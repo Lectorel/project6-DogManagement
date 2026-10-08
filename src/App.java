@@ -37,6 +37,11 @@ public class App {
 
     }
 
+    
+    public static ArrayList<dog> getDogs(){
+        return dogList;
+    }
+
 /*
     static void writeToFile() throws IOException{
 
