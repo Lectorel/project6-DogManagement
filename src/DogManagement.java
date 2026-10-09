@@ -7,20 +7,16 @@ Program 6: MPLS Dog Management System
 */
 
 import java.util.ArrayList; //Importing Scanner Class
-import java.util.Scanner; //importing arraylist function
-
+import java.util.Scanner; //Importing ArrayList Class
 public class DogManagement {
 
     //DECLARING PARALEL ARRAYS OUTSIDE OF MAIN METHOD TO HOLD DOG DATA use the static keyword
 
     //readfromfile goes to arraylist, arraylist convert to objects, with index 0 used for object name
-    static ArrayList<Dog> dogList = new ArrayList<Dog>();
-    dogList = getDogs();
+   static ArrayList<Dog> globalDogList = new ArrayList<Dog>();
     //test change
     
-	// static ArrayList<String> dogName;
-	// static ArrayList<double> dogWeight;
-	// static ArrayList<Integer> dogAge;
+
 
     //readFromFile();
     //DECLARING SCANNER OBJECT
@@ -48,7 +44,9 @@ public class DogManagement {
         int menuOption;
 
 		//read existing doginfo file, convert into entries into dog objects, create arraylist for dogIDs
-    
+        Helper helper = new Helper();
+        globalDogList = helper.dogList;
+
         welcome();
         while(true){
             options();
@@ -69,7 +67,8 @@ public class DogManagement {
             }
         }    
 
-    }
+    } 
+    
 
     //Welcome method that outputs introductory options explaining program
     
@@ -86,18 +85,7 @@ public class DogManagement {
         System.out.println(NAV_OPT_4);
 
     }
-
-
-    /*
-    *
-    *Found and adapted methods below from here: https://stackoverflow.com/questions/24835445/how-to-limit-the-input-to-the-scanner
-    *method getInput was written to allow users to navigate menu without breaking the program with invalid input
-    *methods isInteger and isDouble check for correct data type
-    *method menuLimit sets the upper and lower bounds of accepted int/double
-    *method getInput was reproduced as dogWeight for use with doubles
-    */
-    
-    public static int getInput(Scanner scn, String prompt, String error, int upperLimit) { 
+  public static int getInput(Scanner scn, String prompt, String error, int upperLimit) { 
         /* @param scn - used to get user input
         * @param prompt - what string the program outputs to direct the user
         * @param upperLimit -  highest number the menu can navigate to/the highest accepted value for a array element
@@ -107,9 +95,11 @@ public class DogManagement {
         String menuString = "";
         while (true) { // Keep looping until valid input is found
             menuString = scn.nextLine();
-            if(isInteger(menuString)) // method call
+            if(isInteger(menuString)) {// method call
                 break; // Exit loop
-            System.out.print("Invalid input type, " + prompt); // Wasn't valid, prompt again
+            } else {
+                System.out.print("Invalid input type, " + prompt); // Wasn't valid, prompt again
+            }
         }
         while (true)  {
             menuOption = Integer.parseInt(menuString);
@@ -123,6 +113,23 @@ public class DogManagement {
         return menuOption; // Return valid user input
     }
 
+    public static int dogAge(Scanner scn, String prompt) {
+        System.out.print(prompt); // Tell user what to input
+        int menuOption;
+        String menuString;
+        while (true) { // Keep looping until valid input is found
+            menuString = scn.next();
+            if(isInteger(menuString)) {
+                menuOption = Integer.parseInt(menuString);
+                break;
+            }else {
+                System.out.print("Invalid input type, " + prompt);
+            } // Wasn't valid, prompt again
+        }
+        return menuOption; // Return valid user input
+    }
+
+
     public static double dogWeight(Scanner scn, String prompt) { 
         /*
         * @param scn - used to get user input
@@ -130,14 +137,20 @@ public class DogManagement {
         */
         double menuOption;
         System.out.print(prompt); // Tell user what to input
-        String menuString = "";
+        String menuString;
         while (true) { // Keep looping until valid input is found
-            menuString = scn.nextLine();
-            if(isDouble(menuString)) // method call
+            menuString = scn.next();
+            if(isDouble(menuString)) {// method call
+                menuOption = Double.parseDouble(menuString);
                 break; // Exit loop
-            System.out.print("Invalid input type, " + prompt); // Wasn't valid, prompt again
+            } else if(isInteger(menuString)) {
+                double converter = Integer.parseInt(menuString);
+                menuOption = converter;
+                break;
+            }else {
+                System.out.print("Invalid input type, " + prompt);
+            } // Wasn't valid, prompt again
         }
-        menuOption = Double.parseDouble(menuString);
         return menuOption; // Return valid user input
     }
 
@@ -177,6 +190,9 @@ public class DogManagement {
     }
 
 	public static int getIndex (String prompt, String error, ArrayList <Dog> u){
+       // Helper helper = new Helper();
+        //globalDogList = helper.dogList;
+        
         int userResponse;
 		userResponse = getInput(scn, prompt, error, 1000);
         while(true){
@@ -193,41 +209,46 @@ public class DogManagement {
     }
 
 	    //end helper methods
-	
-    
-    //methods for menu options
-    
-    public static void entryDisplay() {
+
+	public static void entryDisplay() { //option 2
         //no parameters in this one.
-        if(dogList.isEmpty()){
+
+        //Helper helper = new Helper();
+       //globalDogList = helper.dogList;
+        if(globalDogList.isEmpty()){
             System.out.println("No existing entries, terminating entry display.");
         } else {
-     		
+     		for (int i = 0; i < globalDogList.size(); i++) { 
+                if(i % 2 == 0) {
+                    System.out.print("ID: " + globalDogList.get(i).getID() + " | Name: " + globalDogList.get(i).getName());
+                } else{
+                System.out.println("\t ID: " + globalDogList.get(i).getID() + " | Name: " + globalDogList.get(i).getName()); 
+                }
+            }
             //change - instead of pulling index, look up actual object and pull that
-            index = getIndex("Enter Dog ID: ", "No existing dog with that id!", dogList);
+            index = getIndex("\nEnter Dog ID: ", "No existing dog with that id!", globalDogList);
             
 			//use ID to look up dog object, and then print dog object's attributes
 
-			//getName(dogList.get(index))
-			//(dogList.get(index)).name
-			System.out.println("\nDog Name: " + dogList.get(index).getName());
-            System.out.println("Dog Weight: " + dogList.get(index).getWeight() + " lbs");
-            System.out.println("Dog Age: " + dogList.get(index).getAge());
+			//getName(globalDogList.get(index))
+			//(globalDogList.get(index)).name
+			System.out.println("\nDog Name: " + globalDogList.get(index).getName());
+            System.out.println("Dog Weight: " + globalDogList.get(index).getWeight() + " lbs");
+            System.out.println("Dog Age: " + globalDogList.get(index).getAge());
         }
     }   
-    
-   
-    //*two methods below are for altering array elements
+//*two methods below are for altering array elements
 
     public static void createEntry() {
-		int numberID;
+		//Helper helper = new Helper();
+        //globalDogList = helper.dogList;
+        int numberID;
 		String dogName;
 		double dogWeight;
 		int dogAge;
-		System.out.println("Create Dog ID: ");
-		numberID = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 1000); //this takes the user input and assigns it to a variable
-		for(int i = 0; i < dogList.size(); i++) {
-            if(dogList.get(index).getID() == (numberID)) {  //edit for object arraylist instead of int
+		numberID = getInput(scn, "Create dog ID: ", "Not a valid ID.", 1000); //this takes the user input and assigns it to a variable
+		for(int i = 0; i < globalDogList.size(); i++) {
+            if(globalDogList.get(index).getID() == (numberID)) {  //edit for object arraylist instead of int
 			    System.out.println("Dog ID already in use, please choose another.");
 			    numberID = getInput(scn, "Enter dog ID: ", "Not a valid ID.", 1000);
 		    }
@@ -235,23 +256,24 @@ public class DogManagement {
         System.out.print("Enter Dog Name: "); 
         dogName = scn.next();
         dogWeight = dogWeight(scn, "Enter Dog Weight in lbs: ");
-        dogAge = getInput(scn, "Enter Dog Age: ", "Please be serious. What's the actual age?", 32);
+        dogAge = dogAge(scn, "Enter Dog Age: ");
         //according to wikipedia, the oldest dog to ever live died a few months short of 32 years old
 
 		Dog adog = new Dog(numberID, dogName, dogWeight, dogAge);
-        dogList.add(adog);
+        globalDogList.add(adog);
 
 		//create dog object and then write attributes back to file
 		
-        System.out.println("\nRecord " + numberID + " has successfully been created.\n");
+        System.out.println("Record " + numberID + " has successfully been created.\n");
     }
 
 
 
     public static void entryUpdate() {
-		//look up dog object by ID attribute
+		//Helper helper = new Helper();
+        //globalDogList = helper.dogList;
 		int fieldNumber;
-		index = getIndex("Enter Dog ID: ", "No existing dog with that id!", dogList);
+		index = getIndex("Enter Dog ID: ", "No existing dog with that id!", globalDogList);
 		
         //the part where users are allowed to update fields, where fieldNumber gets initialized
         System.out.println(ENTRY_UPDATE_PROMPT);
@@ -259,27 +281,40 @@ public class DogManagement {
         System.out.println(UPDATE_OPT_2);
         System.out.println(UPDATE_OPT_3);
 		System.out.println(UPDATE_OPT_4);
-        fieldNumber = getInput(scn, "Enter the field number you wish to edit: ", "Selected field does not exist.", 3);
+        fieldNumber = getInput(scn, "Enter the field number you wish to edit: ", "Selected field does not exist.", 4);
         switch(fieldNumber){
             case 1: //updates dog name
-			    //(dogList.get(index)).name
-                System.out.println("Current Dog Name: " + dogList.get(index).getName());
+			    //(globalDogList.get(index)).name
+                System.out.println("Current Dog Name: " + globalDogList.get(index).getName());
                 System.out.print("Enter new Dog Name: ");
                 String nameholder = scn.next();
-                dogList.get(index).setName(nameholder);
+                globalDogList.get(index).setName(nameholder);
                 break;
             case 2: //updates dog weight
-                System.out.println("Current Dog weight: " + dogList.get(index).getWeight() + " lbs");
+                System.out.println("Current Dog weight: " + globalDogList.get(index).getWeight() + " lbs");
                 double weightHolder = dogWeight(scn, "Enter new dog weight: ");
-                dogList.get(index).setWeight(weightHolder);
+                globalDogList.get(index).setWeight(weightHolder);
                 break;
             case 3: //updates dog age
-                System.out.println("Current Dog Age: " + dogList.get(index).getAge());
-                int ageHolder = getInput(scn, "Enter Dog Age: ", "Please be serious. What's the actual age?", 32);
-                dogList.get(index).setAge(ageHolder);
+                System.out.println("Current Dog Age: " + globalDogList.get(index).getAge());
+                int ageHolder = dogAge(scn, "Enter Dog Age: ");
+                globalDogList.get(index).setAge(ageHolder);
                 break;
+            case 4: //deletes dog record
+                System.out.println("Hit Y to confirm deletion, or any other key to go back to home screen.");
+                if(scn.next().equalsIgnoreCase("Y")) {
+                    globalDogList.remove(index);
+                    System.out.println("Dog record deleted.");
+                } else {
+                    System.out.println("Returning to home screen.");
+                }
 			//delete dog object, remove from file
 		}
 		//write changes back to csv
     }
-}
+    
+    
+
+    }
+    
+
