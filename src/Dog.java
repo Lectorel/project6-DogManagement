@@ -5,10 +5,10 @@ public class Dog {
   private int age;
 
   public Dog (int nu, String na, double we, int ag){
-    nu = numberID;
-    na = name;
-    we = weight;
-    ag = age;
+    numberID = nu;
+    name = na;
+    weight = we;
+    age = ag;
   }
   
   public void setID(int numberID){
